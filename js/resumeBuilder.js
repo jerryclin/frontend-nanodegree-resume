@@ -23,30 +23,60 @@ var bio = {
 var work = {
     "jobs" : [
         {
-        "employer" : "Ninja Factory",
-        "title" : "Front End Trainee",
-        "location:" : "Industrial Town",
-        "date" : "Feb 14th, 2015",
-        "description" : "Helps writing HTML & CSS"
+            "employer" : "Ninja Factory",
+            "title" : "Front End Trainee",
+            "location" : "Industrial Town",
+            "date" : "Feb 14th, 2015",
+            "description" : "Helps writing HTML & CSS"
         },
          {
-        "employer" : "Video Factory",
-        "title" : "Videographer",
-        "location:" : "San Jose",
-        "date" : "Jan 14th, 2012",
-        "description" : "Assist in videography"
+            "employer" : "Video Factory",
+            "title" : "Videographer",
+            "location" : "San Jose",
+            "date" : "Jan 14th, 2012",
+            "description" : "Assist in videography"
         }
     ]
 };
 
 var education = {
-    "schoolname" : "UBC",
-    "degree" : "Master of Management"
+    "schools" : [
+        {   
+            "name" : "UBC",
+            "location" : "Vancouver",
+            "degree" : "Master of Management",
+            "major" : ["IT Management", "Operation", "Marketing"],
+            "dates" : "August 2012",
+            "url" : "http://www.ubc.ca"
+        }
+    ],
+    "onlineCourses" : [
+        {
+            "title" : "Front End Nanodegree",
+            "school" : "Udacity",
+            "dates" : "January 2016",
+            "url" : "http://www.udacity.com"
+        }
+    ]
+
 };
 
-var project = {
-    "title" : "Front End Resume",
-    "description" : "Resume built using javascript, html and css"
+var projects = {
+    "projects" : [
+        {
+            "title" : "Front End Resume",
+            "dates" : "Jan 1st 2016",
+            "description" : "Resume built using javascript, html and css",
+            "images" : ["images/project_image.jpg", "images/project_image2.jpg"]
+        },
+        {
+            "title" : "Rage Quit Game",
+            "dates" : "Jan 1st 2014",
+            "description" : "2D game built using javascript, html and css",
+            "images" : ["images/project_image.jpg", "images/project_image2.jpg"]
+        }
+    ]
+
 }
 
 var formattedName = HTMLheaderName.replace("%data%", bio.name);
@@ -57,23 +87,57 @@ var formattedRole = HTMLheaderRole.replace("%data%", bio.role);
 $("#header").prepend(formattedName);
 $("#header").append(formattedRole);
 
-// bio
-$("#header").prepend(HTMLbioPic.replace("%data%", bio.picture_URL));
-$("#header").append(HTMLwelcomeMsg.replace("%data%", bio.welcome_message));
-$("#header").append(HTMLskills.replace("%data%", bio.skills));
-$("#header").append(HTMLemail.replace("%data%", bio.contacts));
+
+
+// bio // check if there are any skills in the bio object
+
+if(Boolean(bio) === true){
+    $("#header").prepend(HTMLbioPic.replace("%data%", bio.picture_URL));
+    $("#header").append(HTMLwelcomeMsg.replace("%data%", bio.welcome_message));
+    $("#header").append(HTMLskills.replace("%data%", bio.skills));
+    $("#header").append(HTMLemail.replace("%data%", bio.contacts.email));
+}
 
 
 // work
-$("#workExperience").append(HTMLworkStart);
-$("#workExperience").append(HTMLworkEmployer.replace("%data%", work.jobs[0].employer));
-$("#workExperience").append(HTMLworkTitle.replace("%data%", work.jobs[0].title));
-$("#workExperience").append(HTMLworkLocation.replace("%data%", work.jobs[0].location));
+
+for (job in work.jobs){
+    if (work.jobs.hasOwnProperty(job)) {
+        $("#workExperience").append(HTMLworkStart);
+        var formattedEmployer = HTMLworkEmployer.replace("%data%", work.jobs[job].employer);
+        var formattedTitle = HTMLworkTitle.replace("%data%", work.jobs[job].title);
+        var formattedLocation = HTMLworkLocation.replace("%data%", work.jobs[job].location);
+        var formattedDate = HTMLworkDates.replace("%data%", work.jobs[job].date);
+        var formattedDescription = HTMLworkDescription.replace("%data%", work.jobs[job].description);
+
+        var formattedEmployerTitle = formattedEmployer + formattedTitle;
+
+        $(".work-entry:last").append(formattedEmployerTitle, formattedLocation, formattedDate, formattedDescription);
+    }
+}
 
 // project
-$("#projects").append(HTMLprojectStart);
-$("#projects").append(HTMLprojectTitle.replace("%data%", project.title));
-$("#projects").append(HTMLprojectDescription.replace("%data%", project.description));
+
+
+
+projects.display = function() {
+    for (project in projects.projects){
+        $("#projects").append(HTMLprojectStart);
+        var formattedTitle = HTMLprojectTitle.replace("%data%", projects.projects[project].title);
+        var formattedDates = HTMLprojectTitle.replace("%data%", projects.projects[project].dates);
+        var formattedDescription = HTMLprojectDescription.replace("%data%", projects.projects[project].description);
+        $(".project-entry:last").append(formattedTitle, formattedDates, formattedDescription);
+
+        if (projects.projects[project].images.length > 0) {
+           for (image in projects.projects[project].images) { 
+                var formattedImage = HTMLprojectImage.replace("%data%", projects.projects[project].images[image]);
+                $(".project-entry:last").append(formattedImage);
+            }
+        }
+    }
+}
+
+projects.display();
 
 // education
 $("#education").append(HTMLschoolStart);
@@ -81,7 +145,14 @@ $("#education").append(HTMLschoolName.replace("%data%",education["schoolname"]))
 $("#education").append(HTMLschoolDegree.replace("%data%", education["degree"]));
 
 
+function inName(name){
+    var name_array = name.split(" ");
+    var firstname = name_array[0].charAt(0).toUpperCase() + name_array[0].slice(1).toLowerCase();
+    var secondname = name_array[1].toUpperCase();
+    
+    return firstname + " " + secondname;
+}
 
-
+$("#main").append(internationalizeButton);
 
 
