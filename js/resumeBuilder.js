@@ -6,7 +6,7 @@ This is empty on purpose! Your code to build the resume will go here.
 
 
 var bio = {
-    "name" : "Jerry L.",
+    "name" : "Jerry Lin",
     "role" : "Front End Ninja",
     "contacts" : {
         "mobile" : "123-456-7890",
@@ -124,7 +124,7 @@ projects.display = function() {
     for (project in projects.projects){
         $("#projects").append(HTMLprojectStart);
         var formattedTitle = HTMLprojectTitle.replace("%data%", projects.projects[project].title);
-        var formattedDates = HTMLprojectTitle.replace("%data%", projects.projects[project].dates);
+        var formattedDates = HTMLprojectDates.replace("%data%", projects.projects[project].dates);
         var formattedDescription = HTMLprojectDescription.replace("%data%", projects.projects[project].description);
         $(".project-entry:last").append(formattedTitle, formattedDates, formattedDescription);
 
@@ -140,9 +140,29 @@ projects.display = function() {
 projects.display();
 
 // education
-$("#education").append(HTMLschoolStart);
-$("#education").append(HTMLschoolName.replace("%data%",education["schoolname"]));
-$("#education").append(HTMLschoolDegree.replace("%data%", education["degree"]));
+
+for (school in education.schools){
+    if (education.schools.hasOwnProperty(school)) {
+        $("#education").append(HTMLschoolStart);
+        var formattedschoolName = HTMLschoolName.replace("%data%", education.schools[school].name);
+        var formattedschoolDegree = HTMLschoolDegree.replace("%data%", education.schools[school].degree);    
+        var formattedschoolDates = HTMLschoolDates.replace("%data%", education.schools[school].dates);
+        var formattedschoolLocation = HTMLschoolLocation.replace("%data%", education.schools[school].location);
+        var formattedschoolMajor = HTMLschoolMajor.replace("%data%", education.schools[school].major);
+        $(".education-entry:last").append(formattedschoolName, formattedschoolDegree, formattedschoolDates, formattedschoolLocation, formattedschoolMajor); 
+    }
+}
+
+for (course in education.onlineCourses){
+    if (education.onlineCourses.hasOwnProperty(course)) {
+        $("#education").append(HTMLschoolStart);
+        var formattedonlineTitle = HTMLonlineTitle.replace("%data%", education.onlineCourses[course].title);
+        var formattedonlineSchool = HTMLonlineSchool.replace("%data%", education.onlineCourses[course].school);    
+        var formattedonlineDates = HTMLonlineDates.replace("%data%", education.onlineCourses[course].dates);
+        var formattedonlineURL = HTMLonlineURL.replace("%data%", education.onlineCourses[course].url);
+        $(".education-entry:last").append(HTMLonlineClasses, formattedonlineTitle, formattedonlineSchool, formattedonlineDates, formattedonlineURL); 
+    }
+}
 
 
 function inName(name){
@@ -153,6 +173,7 @@ function inName(name){
     return firstname + " " + secondname;
 }
 
-$("#main").append(internationalizeButton);
+$("#header").append(internationalizeButton);
 
+$("#mapDiv").append(googleMap);
 
